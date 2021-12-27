@@ -1,0 +1,13 @@
+#TodoContainer {
+  margin: 120px auto;
+  max-width: 400px;
+  width: 100%;
+  background: #fff;
+  border-radius: 5px;
+  padding: 25px;
+}
+
+#TodoContainer h1 {
+  font-size: 30px;
+  font-weight: 600;
+}

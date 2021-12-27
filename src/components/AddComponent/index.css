@@ -1,0 +1,25 @@
+.AddComponent {
+  display: flex;
+  height: 45px;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.AddComponent button {
+  width: 60px;
+  height: 100%;
+  font-size: 22px;
+  margin-left: 8px;
+}
+
+.AddComponent button.active {
+  opacity: 1;
+  /* disable the cursor pointer */
+  pointer-events: auto;
+}
+
+.AddComponent button.inactive {
+  opacity: 0.6;
+  /* disable the cursor pointer */
+  pointer-events: none;
+}

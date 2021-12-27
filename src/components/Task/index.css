@@ -1,0 +1,44 @@
+.Task {
+  overflow-x: hidden;
+  max-height: 250px;
+}
+
+.Task li {
+  list-style: none;
+  height: 45px;
+  background-color: #f2f2f2;
+  margin-bottom: 8px;
+  border-radius: 3px;
+  padding: 0 15px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.Task li span {
+  position: absolute;
+  background-color: #e74c3c;
+  color: #fff;
+  height: 45px;
+  width: 45px;
+  text-align: center;
+  border-radius: 0 3px 3px 0;
+  cursor: pointer;
+  transition: all 0.4s linear;
+  right: -45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Task li:hover span {
+  right: 0px;
+}
+
+@media screen and (max-width: 768px) {
+  .Task li span {
+    right: 0px;
+  }
+}

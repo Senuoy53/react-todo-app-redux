@@ -1,0 +1,15 @@
+.TodoFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.TodoFooter button {
+  font-size: 16px;
+  padding: 10px 10px;
+  width: 90px;
+  opacity: 1;
+  pointer-events: auto;
+}
