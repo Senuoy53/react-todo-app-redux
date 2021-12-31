@@ -5,6 +5,9 @@ import App from "./App";
 import { Provider } from "react-redux";
 import ourStore from "./store";
 
+// Toastify css link
+import "react-toastify/dist/ReactToastify.css";
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={ourStore}>

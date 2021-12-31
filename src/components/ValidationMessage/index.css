@@ -1,18 +1,4 @@
-#TodoContainer {
-  margin: 120px auto;
-  max-width: 400px;
-  width: 100%;
-  background: #fff;
-  border-radius: 5px;
-  padding: 25px;
-}
-
-#TodoContainer h1 {
-  font-size: 30px;
-  font-weight: 600;
-}
-
-#TodoContainer .overlay {
+.overlay {
   position: fixed;
   width: 100%;
   height: 100vh;
@@ -29,8 +15,7 @@
   align-items: center;
   /* display: none; */
 }
-
-#TodoContainer .popup {
+.popup {
   width: 450px;
   padding: 20px;
   border: 1px solid #e67e22;
@@ -47,7 +32,7 @@
   transform: translate(-50%, -50%);
 }
 
-#TodoContainer .dialog-btn {
+.dialog-btn {
   color: white;
   font-weight: 700;
   height: 30px;
@@ -56,11 +41,11 @@
   cursor: pointer;
 }
 
-#TodoContainer .dialog-btn.btn-primary {
+.dialog-btn.btn-primary {
   background: #44b78b;
 }
 
-#TodoContainer .dialog-btn.btn-cancel {
+.dialog-btn.btn-cancel {
   background: #e74c3c;
 }
 
