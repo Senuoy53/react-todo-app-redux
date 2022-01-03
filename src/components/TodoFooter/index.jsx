@@ -11,7 +11,7 @@ const TodoFooter = ({ NumPending, onClick }) => {
       </span>
       {/* Conditional rendering */}
       {!!NumPending && (
-        <CustomButton onClick={onClick}>{btnDefault.clearAll}</CustomButton>
+        <CustomButton onClick={onClick}>{btnDefault.CLEAR_ALL}</CustomButton>
       )}
     </div>
   );

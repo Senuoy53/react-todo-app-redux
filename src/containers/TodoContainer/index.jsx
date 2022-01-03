@@ -15,21 +15,27 @@ import {
 } from "./actions";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { createStructuredSelector } from "reselect";
+import { makeSelectTasksData, makeSelectInputVal } from "./selectors";
+import { toastMessages } from "../../utils/constants";
+
+const tododState = createStructuredSelector({
+  tasksData: makeSelectTasksData(),
+  inputVal: makeSelectInputVal(),
+});
 
 const TodoContainer = () => {
   // const [tasksData, setTasksData] = useState([...Data]);
   // const [inputVal, setInputVal] = useState("");
   const dispatch = useDispatch();
-  const todoData = useSelector((storekamel) => storekamel.todoState);
+  // const todoData = useSelector((storekamel) => storekamel.todoState);
+  const { tasksData, inputVal } = useSelector(tododState);
 
   // Confirm delete Message
   const [deleteMsgOn, setDeleteMsgOn] = useState(false);
 
   // Confirm clear all Message
   const [clearAllMsgOn, setClearAllMsgOn] = useState(false);
-
-  // Button Type
-  const [buttonType, setButtonType] = useState();
 
   // deleteIndex to deleted
   const [deleteIndex, setDeleteIndex] = useState();
@@ -43,12 +49,12 @@ const TodoContainer = () => {
     switch (from) {
       // Add Tasks
       case "add":
-        if (!todoData.inputVal) return;
+        if (!inputVal) return;
         // setTasksData([...tasksData, inputVal]);
         // setInputVal("");
-        dispatch(setTasksData(todoData.inputVal));
+        dispatch(setTasksData(inputVal));
         // Toastify Message
-        toast.success("Task added successfully!!");
+        toast.success(toastMessages.ADD);
 
         // setNumPending(tasksData.length + 1);
         break;
@@ -58,7 +64,6 @@ const TodoContainer = () => {
         setDeleteMsgOn(true);
         // take the index to deleted
         setDeleteIndex(index);
-        setButtonType("clear_task");
 
         // Confirm Message
         // var deleteConfirm = window.confirm("Do you want to delete this task ?");
@@ -73,7 +78,7 @@ const TodoContainer = () => {
       case "clear_all":
         //  change clear all message to true
         setClearAllMsgOn(true);
-        setButtonType("clear_all");
+
         // Confirm Message
         // var deleteConfirm = window.confirm("Do you want to delete all tasks");
         // if (!deleteConfirm) return;
@@ -87,38 +92,79 @@ const TodoContainer = () => {
     }
   };
 
-  const confirmClick = () => {
-    switch (buttonType) {
-      case "clear_all":
-        setClearAllMsgOn(false);
-        dispatch(deleteTaskAll());
-        toast.success("All tasks are deleted successfully!");
+  // ===== MessageClick =====
+  const MessageClick = (e) => {
+    switch (e.target.id) {
+      case "confirm":
+        switch (e.target.name) {
+          case "clear_all":
+            setClearAllMsgOn(false);
+            dispatch(deleteTaskAll());
+            toast.success(toastMessages.CLEAR_ALL);
+            break;
+          case "clear_task":
+            // if user clicks ok button
+            setDeleteMsgOn(false);
+            dispatch(deleteTask(deleteIndex));
+            // Toastify Message
+            toast.success(toastMessages.CLEAR_TASK);
+            break;
+          default:
+            break;
+        }
         break;
-      case "clear_task":
-        // if user clicks ok button
-        setDeleteMsgOn(false);
-        dispatch(deleteTask(deleteIndex));
-        // Toastify Message
-        toast.success("Task deleted successfully!");
+      case "cancel":
+        switch (e.target.name) {
+          case "clear_all":
+            setClearAllMsgOn(false);
+            break;
+          case "clear_task":
+            // if user clicks cancel button
+            setDeleteMsgOn(false);
+            break;
+          default:
+            break;
+        }
+
         break;
       default:
         break;
     }
   };
 
-  const cancelClick = () => {
-    switch (buttonType) {
-      case "clear_all":
-        setClearAllMsgOn(false);
-        break;
-      case "clear_task":
-        // if user clicks cancel button
-        setDeleteMsgOn(false);
-        break;
-      default:
-        break;
-    }
-  };
+  // const confirmClick = (e) => {
+  //   console.log(e.target.id);
+  //   switch (e.target.name) {
+  //     case "clear_all":
+  //       setClearAllMsgOn(false);
+  //       dispatch(deleteTaskAll());
+  //       toast.success(toastMessages.CLEAR_ALL);
+  //       break;
+  //     case "clear_task":
+  //       // if user clicks ok button
+  //       setDeleteMsgOn(false);
+  //       dispatch(deleteTask(deleteIndex));
+  //       // Toastify Message
+  //       toast.success(toastMessages.CLEAR_TASK);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  // const cancelClick = (e) => {
+  //   switch (e.target.name) {
+  //     case "clear_all":
+  //       setClearAllMsgOn(false);
+  //       break;
+  //     case "clear_task":
+  //       // if user clicks cancel button
+  //       setDeleteMsgOn(false);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   return (
     <div id="TodoContainer">
@@ -126,11 +172,11 @@ const TodoContainer = () => {
       <AddComponent
         placeholder={"Add your new todo"}
         onChange={handleChange}
-        value={todoData.inputVal}
+        value={inputVal}
         onClick={() => handleClick("add")}
       />
       <ul className="Task">
-        {todoData.tasksData.map((item, index) => (
+        {tasksData.map((item, index) => (
           <Task
             key={index}
             texte={item}
@@ -139,22 +185,34 @@ const TodoContainer = () => {
         ))}
       </ul>
       <TodoFooter
-        NumPending={todoData.tasksData.length}
+        NumPending={tasksData.length}
         onClick={() => handleClick("clear_all")}
       />
-      {/* Validation Message */}
-      <ValidationMessage
-        style={{ display: deleteMsgOn ? "block" : "none" }}
-        texte="Do you want to delete this task ?"
-        confirmClick={confirmClick}
-        cancelClick={cancelClick}
-      />
-      <ValidationMessage
-        style={{ display: clearAllMsgOn ? "block" : "none" }}
-        texte="Do you want to delete all tasks ?"
-        confirmClick={confirmClick}
-        cancelClick={cancelClick}
-      />
+      {/* ============ Validation Message ============ */}
+      {/* Conditional Rendering */}
+      {deleteMsgOn && (
+        <ValidationMessage
+          // style={{ display: deleteMsgOn ? "block" : "none " }}
+          texte="Do you want to delete this task ?"
+          // confirmClick={confirmClick}
+          // cancelClick={cancelClick}
+          onClick={MessageClick}
+          // cancelClick={cancelClick}
+          // onClick={MessageClick("cancel")}
+          name="clear_task"
+        />
+      )}
+      {clearAllMsgOn && (
+        <ValidationMessage
+          // style={{ display: clearAllMsgOn ? "block" : "none" }}
+          texte="Do you want to delete all tasks ?"
+          // confirmClick={confirmClick}
+          // cancelClick={cancelClick}
+          onClick={MessageClick}
+          // onClick={MessageClick("cancel")}
+          name="clear_all"
+        />
+      )}
     </div>
   );
 };
