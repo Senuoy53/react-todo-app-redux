@@ -31,11 +31,8 @@ const TodoContainer = () => {
   // const todoData = useSelector((storekamel) => storekamel.todoState);
   const { tasksData, inputVal } = useSelector(tododState);
 
-  // Confirm delete Message
-  const [deleteMsgOn, setDeleteMsgOn] = useState(false);
-
-  // Confirm clear all Message
-  const [clearAllMsgOn, setClearAllMsgOn] = useState(false);
+  // Message
+  const [typeMessage, setTypeMessage] = useState("");
 
   // deleteIndex to deleted
   const [deleteIndex, setDeleteIndex] = useState();
@@ -60,10 +57,11 @@ const TodoContainer = () => {
         break;
       // Delete Task
       case "clear_task":
-        // change delete Message to true
-        setDeleteMsgOn(true);
         // take the index to deleted
         setDeleteIndex(index);
+
+        // type message
+        setTypeMessage("clear_task");
 
         // Confirm Message
         // var deleteConfirm = window.confirm("Do you want to delete this task ?");
@@ -77,7 +75,10 @@ const TodoContainer = () => {
       // Delete All Tasks
       case "clear_all":
         //  change clear all message to true
-        setClearAllMsgOn(true);
+        // setClearAllMsgOn(true);
+
+        // type message
+        setTypeMessage("clear_all");
 
         // Confirm Message
         // var deleteConfirm = window.confirm("Do you want to delete all tasks");
@@ -95,32 +96,37 @@ const TodoContainer = () => {
   // ===== MessageClick =====
   const MessageClick = (e) => {
     switch (e.target.id) {
+      // if user clicks ok button
       case "confirm":
+        // Verification if "clear_all" or "clear_task" by name
         switch (e.target.name) {
           case "clear_all":
-            setClearAllMsgOn(false);
             dispatch(deleteTaskAll());
             toast.success(toastMessages.CLEAR_ALL);
+            // Vider le typeMessage pour fermer la fenetre
+            setTypeMessage("");
             break;
           case "clear_task":
-            // if user clicks ok button
-            setDeleteMsgOn(false);
             dispatch(deleteTask(deleteIndex));
             // Toastify Message
             toast.success(toastMessages.CLEAR_TASK);
+            setTypeMessage("");
             break;
           default:
             break;
         }
         break;
+      // if user clicks cancel button
       case "cancel":
+        // Verification if "clear_all" or "clear_task" by name
         switch (e.target.name) {
           case "clear_all":
-            setClearAllMsgOn(false);
+            // Vider le typeMessage pour fermer la fenetre
+            setTypeMessage("");
             break;
           case "clear_task":
-            // if user clicks cancel button
-            setDeleteMsgOn(false);
+            // Vider le typeMessage pour fermer la fenetre
+            setTypeMessage("");
             break;
           default:
             break;
@@ -190,27 +196,16 @@ const TodoContainer = () => {
       />
       {/* ============ Validation Message ============ */}
       {/* Conditional Rendering */}
-      {deleteMsgOn && (
+      {typeMessage && (
         <ValidationMessage
           // style={{ display: deleteMsgOn ? "block" : "none " }}
-          texte="Do you want to delete this task ?"
-          // confirmClick={confirmClick}
-          // cancelClick={cancelClick}
+          texte={
+            typeMessage === "clear_task"
+              ? "Do you want to delete this task ?"
+              : "Do you want to delete all tasks ?"
+          }
           onClick={MessageClick}
-          // cancelClick={cancelClick}
-          // onClick={MessageClick("cancel")}
-          name="clear_task"
-        />
-      )}
-      {clearAllMsgOn && (
-        <ValidationMessage
-          // style={{ display: clearAllMsgOn ? "block" : "none" }}
-          texte="Do you want to delete all tasks ?"
-          // confirmClick={confirmClick}
-          // cancelClick={cancelClick}
-          onClick={MessageClick}
-          // onClick={MessageClick("cancel")}
-          name="clear_all"
+          name={typeMessage === "clear_task" ? "clear_task" : "clear_all"}
         />
       )}
     </div>
