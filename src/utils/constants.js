@@ -6,9 +6,15 @@ const Data = [
 ];
 
 const btnDefault = {
-  delete: "<FontAwesomeIcon icon={faPlus} />",
-  add: "<FontAwesomeIcon icon={faTrash} />",
-  clearAll: "Clear all",
+  // DELETE: "<FontAwesomeIcon icon={faPlus} />",
+  // ADD: "<FontAwesomeIcon icon={faTrash} />",
+  CLEAR_ALL: "Clear all",
 };
 
-export { Data, btnDefault };
+const toastMessages = {
+  ADD: "Task added successfully!!",
+  CLEAR_TASK: "Task deleted successfully!",
+  CLEAR_ALL: "All tasks are deleted successfully!",
+};
+
+export { Data, btnDefault, toastMessages };

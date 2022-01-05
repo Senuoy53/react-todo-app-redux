@@ -2,25 +2,27 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import "./index.css";
 
-const ValidationMessage = ({ style, texte, confirmClick, cancelClick }) => {
+const ValidationMessage = ({ texte, name, onClick }) => {
   return (
     /* Validation Message */
-    <div className="overlay" id="dialog-container" style={style}>
+    <div className="overlay" id="dialog-container">
       <div className="popup">
         <p>{texte}</p>
         <div className="text-right">
           <Button
             className="dialog-btn btn-primary"
+            name={name}
+            onClick={onClick}
             id="confirm"
-            onClick={confirmClick}
           >
             Ok
           </Button>
 
           <Button
             className="dialog-btn btn-cancel"
+            name={name}
+            onClick={onClick}
             id="cancel"
-            onClick={cancelClick}
           >
             Cancel
           </Button>

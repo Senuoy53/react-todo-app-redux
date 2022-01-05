@@ -21,7 +21,7 @@ const AddComponent = ({ placeholder, value, onChange, onClick }) => {
         value={value}
         className={`${value ? "active" : "inactive"}`}
       >
-        {/* {btnDefault.add} */}
+        {/* {btnDefault.ADD} */}
         <FontAwesomeIcon icon={faPlus} />
       </CustomButton>
     </div>
